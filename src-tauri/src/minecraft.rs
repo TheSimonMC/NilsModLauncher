@@ -45,7 +45,7 @@ pub fn install_fabric_version(minecraft_version: &str, loader_version: &str) -> 
         urlencoding::encode(loader_version)
     );
     let client = reqwest::blocking::Client::builder()
-        .user_agent("NilsModLauncher/1.0.1")
+        .user_agent("NilsModLauncher/1.0.2")
         .build()
         .map_err(|err| err.to_string())?;
     let mut profile = client
@@ -110,34 +110,6 @@ pub fn update_launcher_profile(
 
     write_json_pretty(&profiles_file, &root)?;
     Ok(format!("NilsMod {minecraft_version}"))
-}
-
-pub fn open_minecraft_launcher() -> Result<(), String> {
-    let mut candidates = Vec::new();
-
-    if cfg!(target_os = "windows") {
-        if let Some(program_files) = env::var_os("ProgramFiles(x86)") {
-            candidates.push(PathBuf::from(program_files).join("Minecraft Launcher").join("MinecraftLauncher.exe"));
-        }
-        if let Some(program_files) = env::var_os("ProgramFiles") {
-            candidates.push(PathBuf::from(program_files).join("Minecraft Launcher").join("MinecraftLauncher.exe"));
-        }
-    } else if cfg!(target_os = "macos") {
-        candidates.push(PathBuf::from("/Applications/Minecraft.app"));
-    } else {
-        candidates.push(PathBuf::from("/usr/bin/minecraft-launcher"));
-        candidates.push(PathBuf::from("/usr/local/bin/minecraft-launcher"));
-    }
-
-    for candidate in candidates {
-        if candidate.exists() {
-            return open::that(candidate).map_err(|err| err.to_string());
-        }
-    }
-
-    open::that("minecraft://").map_err(|err| {
-        format!("Minecraft Launcher was not found and minecraft:// could not be opened: {err}")
-    })
 }
 
 pub fn write_json_pretty(path: &Path, value: &Value) -> Result<(), String> {

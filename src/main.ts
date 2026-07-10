@@ -49,6 +49,15 @@ interface InstallResult {
   installedFiles: string[];
 }
 
+interface LaunchResult {
+  profileName: string;
+  versionId: string;
+  gameDir: string;
+  javaPath: string;
+  accountName: string;
+  pid?: number;
+}
+
 interface LauncherState {
   info: AppInfo | null;
   manifest: ManifestModel | null;
@@ -77,12 +86,12 @@ app.innerHTML = `
         <img src="${compactLogo}" class="brand-icon" alt="NilsMod" />
         <div>
           <img src="${fancyLogo}" class="brand-wordmark" alt="NilsMod Launcher" />
-          <p>Cross-platform Fabric profile installer</p>
+          <p>Cross-platform NilsMod launcher</p>
         </div>
       </div>
       <div class="badge">
         <span>Launcher</span>
-        <strong id="launcherVersion">1.0.1</strong>
+        <strong id="launcherVersion">1.0.2</strong>
       </div>
     </section>
 
@@ -108,15 +117,10 @@ app.innerHTML = `
 
         <div id="modList" class="mod-list"></div>
 
-        <label class="toggle-line">
-          <input id="openLauncher" type="checkbox" />
-          <span>Minecraft Launcher nach Installation öffnen</span>
-        </label>
-
         <div class="actions">
-          <button id="installButton" class="primary">Installieren / Updaten</button>
-          <button id="openFolderButton" class="secondary">Instanz-Ordner öffnen</button>
-          <button id="launcherButton" class="secondary">Minecraft Launcher</button>
+          <button id="launchButton" class="primary">NilsMod starten</button>
+          <button id="installButton" class="secondary">Nur installieren</button>
+          <button id="openFolderButton" class="secondary">Instanz-Ordner oeffnen</button>
         </div>
       </article>
 
@@ -219,7 +223,7 @@ function renderMods() {
     ...required.map(
       (mod) => `<div class="mod-card locked">
         <div><strong>${mod.name}</strong><span>${mod.version}</span></div>
-        <em>benötigt</em>
+        <em>benoetigt</em>
       </div>`,
     ),
   ].join("");
@@ -241,7 +245,7 @@ function renderMods() {
 }
 
 async function loadManifest() {
-  setBusy(true, "Manifest lädt...");
+  setBusy(true, "Manifest laedt...");
   try {
     state.manifest = await invoke<ManifestModel>("load_manifest", {
       manifestUrl: manifestInput.value.trim() || null,
@@ -281,6 +285,36 @@ modList.addEventListener("change", (event) => {
 
 $("#refreshManifest").addEventListener("click", () => void loadManifest());
 
+$("#launchButton").addEventListener("click", async () => {
+  if (!state.manifest || state.busy) {
+    return;
+  }
+  setBusy(true, "Startet...");
+  logBox.textContent = "";
+  try {
+    const result = await invoke<LaunchResult>("launch_version", {
+      options: {
+        version: state.selectedVersion,
+        manifestUrl: manifestInput.value.trim() || null,
+        includeSodium: state.optional.sodium ?? true,
+        includeVoiceChat: state.optional["simple-voice-chat"] ?? true,
+      },
+    });
+    appendLog(`Gestartet: ${result.profileName}`);
+    appendLog(`Account: ${result.accountName}`);
+    appendLog(`Version: ${result.versionId}`);
+    appendLog(`Java: ${result.javaPath}`);
+    appendLog(`GameDir: ${result.gameDir}`);
+    if (result.pid) {
+      appendLog(`Prozess: ${result.pid}`);
+    }
+  } catch (error) {
+    appendLog(`Start fehlgeschlagen: ${String(error)}`);
+  } finally {
+    setBusy(false);
+  }
+});
+
 $("#installButton").addEventListener("click", async () => {
   if (!state.manifest || state.busy) {
     return;
@@ -294,7 +328,6 @@ $("#installButton").addEventListener("click", async () => {
         manifestUrl: manifestInput.value.trim() || null,
         includeSodium: state.optional.sodium ?? true,
         includeVoiceChat: state.optional["simple-voice-chat"] ?? true,
-        openLauncher: ($("#openLauncher") as HTMLInputElement).checked,
       },
     });
     appendLog(`Fertig: ${result.profileName}`);
@@ -312,15 +345,7 @@ $("#openFolderButton").addEventListener("click", async () => {
   try {
     await invoke("open_instance_folder", { version: state.selectedVersion });
   } catch (error) {
-    appendLog(`Ordner konnte nicht geöffnet werden: ${String(error)}`);
-  }
-});
-
-$("#launcherButton").addEventListener("click", async () => {
-  try {
-    await invoke("open_minecraft_launcher");
-  } catch (error) {
-    appendLog(`Minecraft Launcher konnte nicht geöffnet werden: ${String(error)}`);
+    appendLog(`Ordner konnte nicht geoeffnet werden: ${String(error)}`);
   }
 });
 

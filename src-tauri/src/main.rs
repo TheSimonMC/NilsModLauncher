@@ -1,12 +1,14 @@
 mod installer;
+mod launch;
 mod manifest;
 mod minecraft;
 
 use installer::{InstallOptions, InstallResult};
+use launch::{LaunchOptions, LaunchResult};
 use manifest::ManifestModel;
 use serde::Serialize;
 
-const LAUNCHER_VERSION: &str = "1.0.1";
+const LAUNCHER_VERSION: &str = "1.0.2";
 const DEFAULT_MANIFEST_URL: &str =
     "https://github.com/TheSimonMC/NilsModLauncher/releases/latest/download/nilsmod-manifest.json";
 
@@ -40,15 +42,15 @@ fn install_version(window: tauri::Window, options: InstallOptions) -> Result<Ins
 }
 
 #[tauri::command]
+fn launch_version(window: tauri::Window, options: LaunchOptions) -> Result<LaunchResult, String> {
+    launch::launch(window, options, DEFAULT_MANIFEST_URL)
+}
+
+#[tauri::command]
 fn open_instance_folder(version: String) -> Result<(), String> {
     let path = minecraft::nilsmod_game_dir(&version)?;
     std::fs::create_dir_all(&path).map_err(|err| err.to_string())?;
     open::that(path).map_err(|err| err.to_string())
-}
-
-#[tauri::command]
-fn open_minecraft_launcher() -> Result<(), String> {
-    minecraft::open_minecraft_launcher()
 }
 
 fn main() {
@@ -57,8 +59,8 @@ fn main() {
             app_info,
             load_manifest,
             install_version,
+            launch_version,
             open_instance_folder,
-            open_minecraft_launcher
         ])
         .run(tauri::generate_context!())
         .expect("error while running NilsMod Launcher");

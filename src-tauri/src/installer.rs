@@ -15,7 +15,6 @@ pub struct InstallOptions {
     pub manifest_url: Option<String>,
     pub include_sodium: bool,
     pub include_voice_chat: bool,
-    pub open_launcher: bool,
 }
 
 #[derive(Debug, Serialize)]
@@ -113,10 +112,6 @@ fn install_fabric(
     write_local_state(entry)?;
     log(window, "Installation abgeschlossen.");
 
-    if options.open_launcher {
-        let _ = minecraft::open_minecraft_launcher();
-    }
-
     Ok(InstallResult {
         profile_name,
         version_id,
@@ -192,7 +187,7 @@ fn download_checked(
 
     let tmp = target.with_extension("download");
     let client = reqwest::blocking::Client::builder()
-        .user_agent("NilsModLauncher/1.0.1")
+        .user_agent("NilsModLauncher/1.0.2")
         .build()
         .map_err(|err| err.to_string())?;
     let mut response = client
