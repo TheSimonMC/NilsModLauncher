@@ -1,0 +1,41 @@
+plugins {
+    id "java"
+    id "application"
+}
+
+group = "de.nilsmod"
+version = launcher_version
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = main_class
+}
+
+dependencies {
+    implementation "com.google.code.gson:gson:2.11.0"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+    options.release = 21
+}
+
+tasks.jar {
+    archiveFileName = "NilsModLauncher.jar"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes(
+                "Main-Class": main_class,
+                "Implementation-Title": "NilsMod Launcher",
+                "Implementation-Version": project.version
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

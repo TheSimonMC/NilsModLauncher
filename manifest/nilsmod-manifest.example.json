@@ -1,0 +1,36 @@
+{
+  "launcherVersion": "1.0.1",
+  "latest": {
+    "1.21.11": {
+      "type": "fabric",
+      "minecraftVersion": "1.21.11",
+      "fabricLoader": "0.19.3",
+      "nilsmodVersion": "1.0.1",
+      "modUrl": "https://github.com/NilsMod/NilsMod/releases/download/v1.0.1/NilsMod-1.21.11-fabric.jar",
+      "sha256": "PUT_HASH_HERE"
+    },
+    "1.21.4": {
+      "type": "fabric",
+      "minecraftVersion": "1.21.4",
+      "fabricLoader": "0.16.10",
+      "nilsmodVersion": "1.0.2",
+      "modUrl": "https://github.com/NilsMod/NilsMod/releases/download/v1.0.2/NilsMod-1.21.4-fabric.jar",
+      "sha256": "PUT_HASH_HERE"
+    },
+    "1.20.1": {
+      "type": "fabric",
+      "minecraftVersion": "1.20.1",
+      "fabricLoader": "0.16.10",
+      "nilsmodVersion": "1.0.2",
+      "modUrl": "https://github.com/NilsMod/NilsMod/releases/download/v1.0.2/NilsMod-1.20.1-fabric.jar",
+      "sha256": "PUT_HASH_HERE"
+    },
+    "1.8.9": {
+      "type": "legacy",
+      "minecraftVersion": "1.8.9",
+      "nilsmodVersion": "1.0.2",
+      "patcherUrl": "https://github.com/NilsMod/NilsMod/releases/download/v1.0.2/NilsMod-1.8.9-patcher.jar",
+      "sha256": "PUT_HASH_HERE"
+    }
+  }
+}
