@@ -739,12 +739,12 @@ fn remove_dir_inside(path: &Path, parent: &Path) -> Result<(), String> {
 
 fn build_classpath(libraries: &[PathBuf], client_jar: &Path) -> String {
     let sep = if cfg!(target_os = "windows") { ";" } else { ":" };
-    libraries
+    let mut entries = libraries
         .iter()
-        .chain(std::iter::once(client_jar))
         .map(|path| path.display().to_string())
-        .collect::<Vec<_>>()
-        .join(sep)
+        .collect::<Vec<_>>();
+    entries.push(client_jar.display().to_string());
+    entries.join(sep)
 }
 
 fn push_arguments(
