@@ -38,7 +38,16 @@ fn load_manifest(manifest_url: Option<String>) -> Result<ManifestModel, String> 
 
 #[tauri::command]
 fn install_version(window: tauri::Window, options: InstallOptions) -> Result<InstallResult, String> {
-    installer::install(window, options, DEFAULT_MANIFEST_URL)
+    let selected_version = options.version.clone();
+    let manifest_url = options.manifest_url.clone();
+    let result = installer::install(window.clone(), options, DEFAULT_MANIFEST_URL)?;
+    let manifest = manifest::load_manifest(manifest_url.as_deref().unwrap_or(DEFAULT_MANIFEST_URL))?;
+    if let Some(entry) = manifest.latest.get(&selected_version) {
+        if entry.kind == "fabric" {
+            launch::ensure_java_for_minecraft_version(&window, &entry.minecraft_version)?;
+        }
+    }
+    Ok(result)
 }
 
 #[tauri::command]

@@ -172,6 +172,13 @@ pub fn launch(
     })
 }
 
+pub fn ensure_java_for_minecraft_version(
+    window: &Window,
+    minecraft_version: &str,
+) -> Result<PathBuf, String> {
+    ensure_zulu_java(window, minecraft_version)
+}
+
 fn ensure_minecraft_version_json(version: &str) -> Result<(), String> {
     let version_dir = minecraft::minecraft_dir()?.join("versions").join(version);
     let version_file = version_dir.join(format!("{version}.json"));
