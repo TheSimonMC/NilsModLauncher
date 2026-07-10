@@ -1,14 +1,9 @@
 $ErrorActionPreference = "Stop"
-$Root = Split-Path -Parent $MyInvocation.MyCommand.Path
-$Jar = Join-Path $Root "NilsModLauncher.jar"
-if (!(Test-Path $Jar)) {
-    $Jar = Join-Path $Root "build\libs\NilsModLauncher.jar"
+$root = Split-Path -Parent $MyInvocation.MyCommand.Path
+Push-Location $root
+try {
+    npm install
+    npm run tauri:dev
+} finally {
+    Pop-Location
 }
-if (!(Test-Path $Jar)) {
-    $Build = Join-Path $Root "build.ps1"
-    if (!(Test-Path $Build)) {
-        throw "NilsModLauncher.jar wurde nicht gefunden."
-    }
-    & $Build
-}
-java -jar $Jar

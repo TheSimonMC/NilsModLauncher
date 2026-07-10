@@ -6,30 +6,44 @@
       "minecraftVersion": "1.21.11",
       "fabricLoader": "0.19.3",
       "nilsmodVersion": "1.0.1",
-      "modUrl": "https://github.com/NilsMod/NilsMod/releases/download/v1.0.1/NilsMod-1.21.11-fabric.jar",
-      "sha256": "PUT_HASH_HERE"
-    },
-    "1.21.4": {
-      "type": "fabric",
-      "minecraftVersion": "1.21.4",
-      "fabricLoader": "0.16.10",
-      "nilsmodVersion": "1.0.2",
-      "modUrl": "https://github.com/NilsMod/NilsMod/releases/download/v1.0.2/NilsMod-1.21.4-fabric.jar",
-      "sha256": "PUT_HASH_HERE"
-    },
-    "1.20.1": {
-      "type": "fabric",
-      "minecraftVersion": "1.20.1",
-      "fabricLoader": "0.16.10",
-      "nilsmodVersion": "1.0.2",
-      "modUrl": "https://github.com/NilsMod/NilsMod/releases/download/v1.0.2/NilsMod-1.20.1-fabric.jar",
-      "sha256": "PUT_HASH_HERE"
+      "modUrl": "https://github.com/TheSimonMC/NilsModLauncher/releases/download/nilsmod-1.0.1/nilsmod-1.0.1.jar",
+      "sha256": "c6d1d8e742a9ba3bd12f269cfb5f4b066893e3d2334f5c9ff844e9e96b56bfac",
+      "requiredMods": [
+        {
+          "id": "fabric-api",
+          "name": "Fabric API",
+          "version": "0.141.4+1.21.11",
+          "fileName": "fabric-api-0.141.4+1.21.11.jar",
+          "url": "https://cdn.modrinth.com/data/P7dR8mSH/versions/5zJNhXV2/fabric-api-0.141.4%2B1.21.11.jar",
+          "sha512": "c092d48c6453bec3264f80f6a35bb334aba3112b5cd6c0e0b2676ce4d81e702cb1e522337f3a732348e757cc2226da3c601a314ae8766334f16af71a13bcc98d"
+        }
+      ],
+      "optionalMods": [
+        {
+          "id": "sodium",
+          "name": "Sodium",
+          "version": "mc1.21.11-0.8.13-fabric",
+          "fileName": "sodium-fabric-0.8.13+mc1.21.11.jar",
+          "url": "https://cdn.modrinth.com/data/AANobbMI/versions/Ny3XyYle/sodium-fabric-0.8.13%2Bmc1.21.11.jar",
+          "sha512": "6e96ed8e547ea7a8c32273a1152cf02cb26246b3a605c4ed782dc84a52cfbc16d07313c2ea7e1e5e5377784e3e9cbc599b0f2dd139d9fe4c9cbe3381f0dc30f0",
+          "defaultEnabled": true
+        },
+        {
+          "id": "simple-voice-chat",
+          "name": "Simple Voice Chat",
+          "version": "fabric-1.21.11-2.6.20",
+          "fileName": "voicechat-fabric-1.21.11-2.6.20.jar",
+          "url": "https://cdn.modrinth.com/data/9eGKb6K1/versions/tiSyltLv/voicechat-fabric-1.21.11-2.6.20.jar",
+          "sha512": "cfc47ba01aa4aa61b3250f411a4beefc1e1eaabe3fcbf4473c8b05ba95ae7a95e83a6816a30b8704d4e54f1538c76852a7f8630a3219582b0960feb1eab9d448",
+          "defaultEnabled": true
+        }
+      ]
     },
     "1.8.9": {
       "type": "legacy",
       "minecraftVersion": "1.8.9",
-      "nilsmodVersion": "1.0.2",
-      "patcherUrl": "https://github.com/NilsMod/NilsMod/releases/download/v1.0.2/NilsMod-1.8.9-patcher.jar",
+      "nilsmodVersion": "planned",
+      "patcherUrl": "https://github.com/TheSimonMC/NilsModLauncher/releases/download/nilsmod-1.8.9/NilsMod-1.8.9-patcher.jar",
       "sha256": "PUT_HASH_HERE"
     }
   }
