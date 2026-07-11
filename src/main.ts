@@ -102,17 +102,12 @@ app.innerHTML = `
           <span id="platformText">Windows / Linux / macOS</span>
         </div>
 
-        <label class="field">
-          <span>Manifest URL</span>
-          <input id="manifestUrl" spellcheck="false" />
-        </label>
-
         <div class="row">
           <label class="field compact">
             <span>Minecraft Version</span>
             <select id="versionSelect"></select>
           </label>
-          <button id="refreshManifest" class="secondary">Manifest neu laden</button>
+          <button id="refreshManifest" class="secondary">Updates pruefen</button>
         </div>
 
         <div id="modList" class="mod-list"></div>
@@ -158,7 +153,6 @@ const $ = <T extends HTMLElement>(selector: string) => {
   return element;
 };
 
-const manifestInput = $("#manifestUrl") as HTMLInputElement;
 const versionSelect = $("#versionSelect") as HTMLSelectElement;
 const modList = $("#modList");
 const logBox = $("#log");
@@ -248,7 +242,7 @@ async function loadManifest() {
   setBusy(true, "Manifest laedt...");
   try {
     state.manifest = await invoke<ManifestModel>("load_manifest", {
-      manifestUrl: manifestInput.value.trim() || null,
+      manifestUrl: null,
     });
     appendLog(`Manifest geladen: Launcher ${state.manifest.launcherVersion}`);
     renderVersions();
@@ -263,7 +257,6 @@ async function loadManifest() {
 async function boot() {
   await listen<string>("install-log", (event) => appendLog(event.payload));
   state.info = await invoke<AppInfo>("app_info");
-  manifestInput.value = state.info.defaultManifestUrl;
   $("#launcherVersion").textContent = state.info.launcherVersion;
   $("#platformText").textContent = state.info.platform;
   $("#minecraftDir").textContent = state.info.minecraftDir;
@@ -295,7 +288,7 @@ $("#launchButton").addEventListener("click", async () => {
     const result = await invoke<LaunchResult>("launch_version", {
       options: {
         version: state.selectedVersion,
-        manifestUrl: manifestInput.value.trim() || null,
+        manifestUrl: null,
         includeSodium: state.optional.sodium ?? true,
         includeVoiceChat: state.optional["simple-voice-chat"] ?? true,
       },
@@ -325,7 +318,7 @@ $("#installButton").addEventListener("click", async () => {
     const result = await invoke<InstallResult>("install_version", {
       options: {
         version: state.selectedVersion,
-        manifestUrl: manifestInput.value.trim() || null,
+        manifestUrl: null,
         includeSodium: state.optional.sodium ?? true,
         includeVoiceChat: state.optional["simple-voice-chat"] ?? true,
       },
