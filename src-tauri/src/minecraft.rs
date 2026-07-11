@@ -45,7 +45,7 @@ pub fn install_fabric_version(minecraft_version: &str, loader_version: &str) -> 
         urlencoding::encode(loader_version)
     );
     let client = reqwest::blocking::Client::builder()
-        .user_agent("NilsModLauncher/1.0.2")
+        .user_agent("NilsModLauncher/1.0.3")
         .build()
         .map_err(|err| err.to_string())?;
     let mut profile = client

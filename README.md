@@ -25,13 +25,13 @@ The launcher does not distribute Minecraft itself. Users must own Minecraft. For
 Uploaded mod artifact:
 
 ```text
-https://github.com/TheSimonMC/NilsModLauncher/releases/download/nilsmod-1.0.1/nilsmod-1.0.1.jar
+https://raw.githubusercontent.com/TheSimonMC/NilsModLauncher/main/releases/nilsmod-1.0.3.jar
 ```
 
 SHA-256:
 
 ```text
-c6d1d8e742a9ba3bd12f269cfb5f4b066893e3d2334f5c9ff844e9e96b56bfac
+a8eb4859f9df676bc8b64bf23a7906ef7f59c778140bc77af6a62c97946101ac
 ```
 
 ## How It Works
@@ -83,7 +83,7 @@ On Windows without Rust installed, `npm run build` still validates the TypeScrip
 Default manifest URL:
 
 ```text
-https://github.com/TheSimonMC/NilsModLauncher/releases/latest/download/nilsmod-manifest.json
+https://raw.githubusercontent.com/TheSimonMC/NilsModLauncher/main/manifest/nilsmod-manifest.example.json
 ```
 
 See [manifest/nilsmod-manifest.example.json](manifest/nilsmod-manifest.example.json).

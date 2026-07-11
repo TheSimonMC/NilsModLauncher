@@ -8,9 +8,9 @@ use launch::{LaunchOptions, LaunchResult};
 use manifest::ManifestModel;
 use serde::Serialize;
 
-const LAUNCHER_VERSION: &str = "1.0.2";
+const LAUNCHER_VERSION: &str = "1.0.3";
 const DEFAULT_MANIFEST_URL: &str =
-    "https://github.com/TheSimonMC/NilsModLauncher/releases/latest/download/nilsmod-manifest.json";
+    "https://raw.githubusercontent.com/TheSimonMC/NilsModLauncher/main/manifest/nilsmod-manifest.example.json";
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]

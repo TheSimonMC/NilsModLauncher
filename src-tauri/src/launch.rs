@@ -138,7 +138,7 @@ pub fn launch(
     replacements.insert("user_properties".to_string(), "{}".to_string());
     replacements.insert("version_type".to_string(), version_tree.version_type.clone());
     replacements.insert("launcher_name".to_string(), "NilsMod Launcher".to_string());
-    replacements.insert("launcher_version".to_string(), "1.0.2".to_string());
+    replacements.insert("launcher_version".to_string(), "1.0.3".to_string());
     replacements.insert(
         "natives_directory".to_string(),
         natives_dir.display().to_string(),
@@ -842,7 +842,7 @@ fn current_os_name() -> &'static str {
 
 fn http_client() -> Result<reqwest::blocking::Client, String> {
     reqwest::blocking::Client::builder()
-        .user_agent("NilsModLauncher/1.0.2")
+        .user_agent("NilsModLauncher/1.0.3")
         .build()
         .map_err(|err| err.to_string())
 }

@@ -1,6 +1,6 @@
 [package]
 name = "nilsmod-launcher"
-version = "1.0.2"
+version = "1.0.3"
 description = "Cross-platform NilsMod launcher"
 authors = ["NilsMod"]
 edition = "2021"

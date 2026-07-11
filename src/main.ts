@@ -91,7 +91,7 @@ app.innerHTML = `
       </div>
       <div class="badge">
         <span>Launcher</span>
-        <strong id="launcherVersion">1.0.2</strong>
+        <strong id="launcherVersion">1.0.3</strong>
       </div>
     </section>
 

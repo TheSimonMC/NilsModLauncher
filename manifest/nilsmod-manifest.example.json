@@ -1,13 +1,13 @@
 {
-  "launcherVersion": "1.0.2",
+  "launcherVersion": "1.0.3",
   "latest": {
     "1.21.11": {
       "type": "fabric",
       "minecraftVersion": "1.21.11",
       "fabricLoader": "0.19.3",
-      "nilsmodVersion": "1.0.1",
-      "modUrl": "https://github.com/TheSimonMC/NilsModLauncher/releases/download/nilsmod-1.0.1/nilsmod-1.0.1.jar",
-      "sha256": "c6d1d8e742a9ba3bd12f269cfb5f4b066893e3d2334f5c9ff844e9e96b56bfac",
+      "nilsmodVersion": "1.0.3",
+      "modUrl": "https://raw.githubusercontent.com/TheSimonMC/NilsModLauncher/main/releases/nilsmod-1.0.3.jar",
+      "sha256": "a8eb4859f9df676bc8b64bf23a7906ef7f59c778140bc77af6a62c97946101ac",
       "requiredMods": [
         {
           "id": "fabric-api",
