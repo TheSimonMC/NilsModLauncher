@@ -7,7 +7,7 @@
       "fabricLoader": "0.19.3",
       "nilsmodVersion": "1.0.3",
       "modUrl": "https://raw.githubusercontent.com/TheSimonMC/NilsModLauncher/main/releases/nilsmod-1.0.3.jar",
-      "sha256": "9b0419d760531b4fe8248b66541c20800116221556c8ed6f4c37b20244259c74",
+      "sha256": "ab09098a4b1f216d6ea58d712e91b473129b4c020501a7a30263f3f0d621ed37",
       "requiredMods": [
         {
           "id": "fabric-api",
