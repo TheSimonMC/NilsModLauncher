@@ -1,6 +1,6 @@
 {
   "name": "nilsmod-launcher",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Cross-platform NilsMod launcher and profile installer.",
   "private": true,
   "type": "module",

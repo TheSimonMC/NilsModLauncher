@@ -31,7 +31,10 @@ pub fn install(
     options: InstallOptions,
     default_manifest_url: &str,
 ) -> Result<InstallResult, String> {
-    let manifest_url = options.manifest_url.as_deref().unwrap_or(default_manifest_url);
+    let manifest_url = options
+        .manifest_url
+        .as_deref()
+        .unwrap_or(default_manifest_url);
     log(&window, "Manifest wird geladen...");
     let manifest = manifest::load_manifest(manifest_url)?;
     let entry = manifest
@@ -93,7 +96,10 @@ fn install_fabric(
             installed_files.push(path.display().to_string());
         } else if path.exists() {
             fs::remove_file(&path).map_err(|err| err.to_string())?;
-            log(window, &format!("{} wurde deaktiviert und entfernt.", optional.name));
+            log(
+                window,
+                &format!("{} wurde deaktiviert und entfernt.", optional.name),
+            );
         }
     }
 
@@ -103,11 +109,8 @@ fn install_fabric(
         .ok_or("Fabric entry is missing fabricLoader")?;
     log(window, "Fabric Loader-Profil wird geschrieben...");
     let version_id = minecraft::install_fabric_version(&entry.minecraft_version, loader)?;
-    let profile_name = minecraft::update_launcher_profile(
-        &entry.minecraft_version,
-        &version_id,
-        &game_dir,
-    )?;
+    let profile_name =
+        minecraft::update_launcher_profile(&entry.minecraft_version, &version_id, &game_dir)?;
 
     write_local_state(entry)?;
     log(window, "Installation abgeschlossen.");
@@ -187,7 +190,7 @@ fn download_checked(
 
     let tmp = target.with_extension("download");
     let client = reqwest::blocking::Client::builder()
-        .user_agent("NilsModLauncher/1.0.3")
+        .user_agent("NilsModLauncher/1.0.4")
         .build()
         .map_err(|err| err.to_string())?;
     let mut response = client
@@ -204,7 +207,8 @@ fn download_checked(
         if read == 0 {
             break;
         }
-        file.write_all(&buffer[..read]).map_err(|err| err.to_string())?;
+        file.write_all(&buffer[..read])
+            .map_err(|err| err.to_string())?;
     }
     file.flush().map_err(|err| err.to_string())?;
 

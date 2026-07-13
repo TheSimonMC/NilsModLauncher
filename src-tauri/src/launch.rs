@@ -81,7 +81,10 @@ pub fn launch(
         default_manifest_url,
     )?;
 
-    let manifest_url = options.manifest_url.as_deref().unwrap_or(default_manifest_url);
+    let manifest_url = options
+        .manifest_url
+        .as_deref()
+        .unwrap_or(default_manifest_url);
     let launcher_manifest = manifest::load_manifest(manifest_url)?;
     let entry = launcher_manifest
         .latest
@@ -110,17 +113,20 @@ pub fn launch(
     let mut replacements = HashMap::new();
     replacements.insert("auth_player_name".to_string(), auth.name.clone());
     replacements.insert("version_name".to_string(), version_tree.version_id.clone());
-    replacements.insert(
-        "game_directory".to_string(),
-        game_dir.display().to_string(),
-    );
+    replacements.insert("game_directory".to_string(), game_dir.display().to_string());
     replacements.insert(
         "assets_root".to_string(),
-        minecraft::minecraft_dir()?.join("assets").display().to_string(),
+        minecraft::minecraft_dir()?
+            .join("assets")
+            .display()
+            .to_string(),
     );
     replacements.insert(
         "game_assets".to_string(),
-        minecraft::minecraft_dir()?.join("assets").display().to_string(),
+        minecraft::minecraft_dir()?
+            .join("assets")
+            .display()
+            .to_string(),
     );
     replacements.insert(
         "assets_index_name".to_string(),
@@ -136,9 +142,12 @@ pub fn launch(
     replacements.insert("auth_xuid".to_string(), auth.xuid.clone());
     replacements.insert("user_type".to_string(), "msa".to_string());
     replacements.insert("user_properties".to_string(), "{}".to_string());
-    replacements.insert("version_type".to_string(), version_tree.version_type.clone());
+    replacements.insert(
+        "version_type".to_string(),
+        version_tree.version_type.clone(),
+    );
     replacements.insert("launcher_name".to_string(), "NilsMod Launcher".to_string());
-    replacements.insert("launcher_version".to_string(), "1.0.3".to_string());
+    replacements.insert("launcher_version".to_string(), "1.0.4".to_string());
     replacements.insert(
         "natives_directory".to_string(),
         natives_dir.display().to_string(),
@@ -255,7 +264,9 @@ fn load_version_tree(version_id: &str, minecraft_version: &str) -> Result<Versio
         game_args,
         asset_index: parent["assetIndex"].clone(),
         client_download: parent["downloads"]["client"].clone(),
-        logging: parent["logging"]["client"].as_object().map(|_| parent["logging"]["client"].clone()),
+        logging: parent["logging"]["client"]
+            .as_object()
+            .map(|_| parent["logging"]["client"].clone()),
     })
 }
 
@@ -264,9 +275,14 @@ fn read_version_json(version_id: &str) -> Result<Value, String> {
         .join("versions")
         .join(version_id)
         .join(format!("{version_id}.json"));
-    let text = fs::read_to_string(&file)
-        .map_err(|err| format!("Version JSON {} konnte nicht gelesen werden: {err}", file.display()))?;
-    serde_json::from_str(&text).map_err(|err| format!("Version JSON {} ist ungueltig: {err}", file.display()))
+    let text = fs::read_to_string(&file).map_err(|err| {
+        format!(
+            "Version JSON {} konnte nicht gelesen werden: {err}",
+            file.display()
+        )
+    })?;
+    serde_json::from_str(&text)
+        .map_err(|err| format!("Version JSON {} ist ungueltig: {err}", file.display()))
 }
 
 fn ensure_client_jar(tree: &VersionTree) -> Result<PathBuf, String> {
@@ -297,7 +313,9 @@ fn ensure_libraries(window: &Window, tree: &VersionTree) -> Result<Vec<PathBuf>,
         if !native_artifact_allowed(&artifact.path) {
             continue;
         }
-        let path = minecraft::minecraft_dir()?.join("libraries").join(&artifact.path);
+        let path = minecraft::minecraft_dir()?
+            .join("libraries")
+            .join(&artifact.path);
         if !path.exists() {
             let label = lib["name"].as_str().unwrap_or(&artifact.path);
             log(window, &format!("Library wird geladen: {label}"));
@@ -334,7 +352,9 @@ fn library_artifact(lib: &Value) -> Result<Option<Artifact>, String> {
         return Ok(Some(Artifact {
             path: path.to_string(),
             url: url.to_string(),
-            sha1: lib["downloads"]["artifact"]["sha1"].as_str().map(str::to_string),
+            sha1: lib["downloads"]["artifact"]["sha1"]
+                .as_str()
+                .map(str::to_string),
         }));
     }
 
@@ -379,7 +399,10 @@ fn extract_natives(
     fs::create_dir_all(&natives_dir).map_err(|err| err.to_string())?;
 
     for path in libraries {
-        let name = path.file_name().and_then(|name| name.to_str()).unwrap_or("");
+        let name = path
+            .file_name()
+            .and_then(|name| name.to_str())
+            .unwrap_or("");
         if !name.contains("natives") {
             continue;
         }
@@ -447,7 +470,11 @@ fn ensure_assets(window: &Window, tree: &VersionTree) -> Result<(), String> {
         if missing == 1 || missing % 100 == 0 {
             log(window, &format!("Assets werden geladen... {missing}"));
         }
-        let url = format!("https://resources.download.minecraft.net/{}/{}", &hash[..2], hash);
+        let url = format!(
+            "https://resources.download.minecraft.net/{}/{}",
+            &hash[..2],
+            hash
+        );
         download_url(&url, &path, Some(hash))?;
     }
 
@@ -467,12 +494,17 @@ fn ensure_logging(window: &Window, tree: &VersionTree) -> Result<Option<String>,
     let Some(id) = logging["file"]["id"].as_str() else {
         return Ok(None);
     };
-    let path = minecraft::minecraft_dir()?.join("assets").join("log_configs").join(id);
+    let path = minecraft::minecraft_dir()?
+        .join("assets")
+        .join("log_configs")
+        .join(id);
     if !path.exists() {
         log(window, "Logging-Konfiguration wird geladen...");
         download_url(url, &path, logging["file"]["sha1"].as_str())?;
     }
-    Ok(Some(argument.replace("${path}", &path.display().to_string())))
+    Ok(Some(
+        argument.replace("${path}", &path.display().to_string()),
+    ))
 }
 
 fn asset_index_id(asset_index: &Value) -> Result<String, String> {
@@ -546,19 +578,22 @@ fn ensure_zulu_java(window: &Window, minecraft_version: &str) -> Result<PathBuf,
         return Ok(java);
     }
 
-    log(window, &format!("Zulu Java {java_major} wird vorbereitet..."));
+    log(
+        window,
+        &format!("Zulu Java {java_major} wird vorbereitet..."),
+    );
     fs::create_dir_all(&runtime_base).map_err(|err| err.to_string())?;
     let package = resolve_zulu_package(java_major)?;
-    let archive_name = package["name"]
-        .as_str()
-        .unwrap_or("zulu-jre21")
-        .to_string();
+    let archive_name = package["name"].as_str().unwrap_or("zulu-jre21").to_string();
     let package_url = package["download_url"]
         .as_str()
         .ok_or("Zulu package has no download_url")?;
     let archive_path = runtime_base.join(&archive_name);
 
-    log(window, &format!("Zulu Runtime wird geladen: {archive_name}"));
+    log(
+        window,
+        &format!("Zulu Runtime wird geladen: {archive_name}"),
+    );
     download_url(package_url, &archive_path, None)?;
 
     let new_dir = runtime_dir.with_extension("new");
@@ -577,10 +612,7 @@ fn ensure_zulu_java(window: &Window, minecraft_version: &str) -> Result<PathBuf,
     }
     fs::rename(&new_dir, &runtime_dir).map_err(|err| err.to_string())?;
 
-    let final_java = runtime_dir.join(
-        java.strip_prefix(&new_dir)
-            .map_err(|err| err.to_string())?,
-    );
+    let final_java = runtime_dir.join(java.strip_prefix(&new_dir).map_err(|err| err.to_string())?);
     Ok(final_java)
 }
 
@@ -745,7 +777,11 @@ fn remove_dir_inside(path: &Path, parent: &Path) -> Result<(), String> {
 }
 
 fn build_classpath(libraries: &[PathBuf], client_jar: &Path) -> String {
-    let sep = if cfg!(target_os = "windows") { ";" } else { ":" };
+    let sep = if cfg!(target_os = "windows") {
+        ";"
+    } else {
+        ":"
+    };
     let mut entries = libraries
         .iter()
         .map(|path| path.display().to_string())
@@ -842,7 +878,7 @@ fn current_os_name() -> &'static str {
 
 fn http_client() -> Result<reqwest::blocking::Client, String> {
     reqwest::blocking::Client::builder()
-        .user_agent("NilsModLauncher/1.0.3")
+        .user_agent("NilsModLauncher/1.0.4")
         .build()
         .map_err(|err| err.to_string())
 }
@@ -874,7 +910,8 @@ fn download_url(url: &str, target: &Path, expected_sha1: Option<&str>) -> Result
         if read == 0 {
             break;
         }
-        file.write_all(&buffer[..read]).map_err(|err| err.to_string())?;
+        file.write_all(&buffer[..read])
+            .map_err(|err| err.to_string())?;
     }
     file.flush().map_err(|err| err.to_string())?;
 

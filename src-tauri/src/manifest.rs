@@ -48,7 +48,7 @@ pub fn load_manifest(url: &str) -> Result<ManifestModel, String> {
     }
 
     let client = reqwest::blocking::Client::builder()
-        .user_agent("NilsModLauncher/1.0.3")
+        .user_agent("NilsModLauncher/1.0.4")
         .build()
         .map_err(|err| err.to_string())?;
 
