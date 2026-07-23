@@ -12,7 +12,10 @@ pub fn minecraft_dir() -> Result<PathBuf, String> {
 
     if cfg!(target_os = "macos") {
         let home = dirs::home_dir().ok_or("Home directory was not found")?;
-        return Ok(home.join("Library").join("Application Support").join("minecraft"));
+        return Ok(home
+            .join("Library")
+            .join("Application Support")
+            .join("minecraft"));
     }
 
     let home = dirs::home_dir().ok_or("Home directory was not found")?;
@@ -34,7 +37,10 @@ pub fn launcher_state_file() -> Result<PathBuf, String> {
         .join("local-version.json"))
 }
 
-pub fn install_fabric_version(minecraft_version: &str, loader_version: &str) -> Result<String, String> {
+pub fn install_fabric_version(
+    minecraft_version: &str,
+    loader_version: &str,
+) -> Result<String, String> {
     let version_id = format!("fabric-loader-{loader_version}-{minecraft_version}");
     let version_dir = minecraft_dir()?.join("versions").join(&version_id);
     fs::create_dir_all(&version_dir).map_err(|err| err.to_string())?;
@@ -45,7 +51,7 @@ pub fn install_fabric_version(minecraft_version: &str, loader_version: &str) -> 
         urlencoding::encode(loader_version)
     );
     let client = reqwest::blocking::Client::builder()
-        .user_agent("NilsModLauncher/1.0.3")
+        .user_agent("NilsModLauncher/1.0.4")
         .build()
         .map_err(|err| err.to_string())?;
     let mut profile = client
@@ -84,7 +90,9 @@ pub fn update_launcher_profile(
         root = json!({});
     }
 
-    let object = root.as_object_mut().ok_or("launcher_profiles root is not an object")?;
+    let object = root
+        .as_object_mut()
+        .ok_or("launcher_profiles root is not an object")?;
     let profiles = object
         .entry("profiles")
         .or_insert_with(|| Value::Object(Map::new()));

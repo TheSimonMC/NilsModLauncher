@@ -10,9 +10,9 @@ use launch::{LaunchOptions, LaunchResult};
 use manifest::ManifestModel;
 use serde::Serialize;
 
-const LAUNCHER_VERSION: &str = "1.0.3";
+const LAUNCHER_VERSION: &str = "1.0.4";
 const DEFAULT_MANIFEST_URL: &str =
-    "https://raw.githubusercontent.com/TheSimonMC/NilsModLauncher/main/manifest/nilsmod-manifest.example.json";
+    "https://github.com/TheSimonMC/NilsModLauncher/releases/latest/download/nilsmod-manifest.json";
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -39,11 +39,15 @@ fn load_manifest(manifest_url: Option<String>) -> Result<ManifestModel, String> 
 }
 
 #[tauri::command]
-fn install_version(window: tauri::Window, options: InstallOptions) -> Result<InstallResult, String> {
+fn install_version(
+    window: tauri::Window,
+    options: InstallOptions,
+) -> Result<InstallResult, String> {
     let selected_version = options.version.clone();
     let manifest_url = options.manifest_url.clone();
     let result = installer::install(window.clone(), options, DEFAULT_MANIFEST_URL)?;
-    let manifest = manifest::load_manifest(manifest_url.as_deref().unwrap_or(DEFAULT_MANIFEST_URL))?;
+    let manifest =
+        manifest::load_manifest(manifest_url.as_deref().unwrap_or(DEFAULT_MANIFEST_URL))?;
     if let Some(entry) = manifest.latest.get(&selected_version) {
         if entry.kind == "fabric" {
             launch::ensure_java_for_minecraft_version(&window, &entry.minecraft_version)?;
